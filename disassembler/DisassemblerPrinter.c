@@ -570,6 +570,78 @@ void print_instructions(FILE *fp)
 			case 0x87:
 				printf("ADD    A");
 				break;
+			case 0x88:
+				printf("ADC    B");
+				break;
+			case 0x89:
+				printf("ADC    C");
+				break;
+			case 0x8A:
+				printf("ADC    D");
+				break;
+			case 0x8B:
+				printf("ADC    E");
+				break;
+			case 0x8C:
+				printf("ADC    H");
+				break;
+			case 0x8D:
+				printf("ADC    L");
+				break;
+			case 0x8E:
+				printf("ADC    M");
+				break;
+			case 0x8F:
+				printf("ADC    A");
+				break;
+			case 0x90:
+				printf("SUB    B");
+				break;
+			case 0x91:
+				printf("SUB    C");
+				break;
+			case 0x92:
+				printf("SUB    D");
+				break;
+			case 0x93:
+				printf("SUB    E");
+				break;
+			case 0x94:
+				printf("SUB    H");
+				break;
+			case 0x95:
+				printf("SUB    L");
+				break;
+			case 0x96:
+				printf("SUB    M");
+				break;
+			case 0x97:
+				printf("SUB    A");
+				break;
+			case 0x98:
+				printf("SBB    B");
+				break;
+			case 0x99:
+				printf("SBB    C");
+				break;
+			case 0x9A:
+				printf("SBB    D");
+				break;
+			case 0x9B:
+				printf("SBB    E");
+				break;
+			case 0x9C:
+				printf("SBB    H");
+				break;
+			case 0x9D:
+				printf("SBB    L");
+				break;
+			case 0x9E:
+				printf("SBB    M");
+				break;
+			case 0x9F:
+				printf("SBB    A");
+				break;
 			case 0xC3:
 				printf("JMP ADR");
 				break;
