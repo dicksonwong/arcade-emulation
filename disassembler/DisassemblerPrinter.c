@@ -14,6 +14,7 @@
 #define HEX_SIZE 16
 #define INSTRUCTION_SIZE_IN_FILE 3
 #define MAX_INSTRUCTION_SIZE 3
+#define MAX_NUM_DATA (MAX_INSTRUCTION_SIZE - 1)
 
 /* gets the next byte represented in two hex characters following the pointer
  * fp and writes it to next_byte; if two characters do not exist, return -1; 
@@ -133,7 +134,7 @@ void print_instructions(FILE *fp)
 	int num_data;
 	int pc = 0;
 	int num_instructions = 0;
-	//char arg;
+	char arg;
 	
 	if (next_byte == NULL) 
 	{
@@ -144,23 +145,20 @@ void print_instructions(FILE *fp)
 	
 	while ((num_data = get_instruction(fp, next_byte, next_instr)) != -1)
 	{
-		/* print the instruction number */
-		/*
-		printf("INSTRUCTION: %x ", next_instr[0]);
-		*/
-		
-		/*
-		/* prints the arguments to instruction if there are any */
-		/*
-		for (arg = 1; arg < num_data + 1; arg++)
-		{
-			printf("ARG%d: %x ", arg, next_instr[arg]);
-		}
-		printf("\n");
-		*/
-		
 		/* print program counter */
 		printf ("%04x ", pc);
+		
+		/* prints the instruction as it appears as hex bytes */
+		for (arg = 0; arg < num_data + 1; arg++)
+		{
+			printf("%02x ", next_instr[arg]);
+		}
+		
+		/* print out padding whitespaces */
+		for (arg = 0; arg < MAX_NUM_DATA - num_data; arg++)
+		{
+			printf("   ");
+		}
 		
 		switch(next_instr[0])
 		{
@@ -338,7 +336,8 @@ void print_instructions(FILE *fp)
 				printf("DAD   SP");
 				break;
 			case 0x3A:
-				printf("LDA    $%02x%02x",next_instr[2],next_instr[1]);
+				printf("LDA    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
 			case 0x3B:
 				printf("DCX    SP");
 				break;
@@ -642,20 +641,293 @@ void print_instructions(FILE *fp)
 			case 0x9F:
 				printf("SBB    A");
 				break;
+			case 0xA0:
+				printf("ANA    B");
+				break;
+			case 0xA1:
+				printf("ANA    C");
+				break;
+			case 0xA2:
+				printf("ANA    D");
+				break;
+			case 0xA3:
+				printf("ANA    E");
+				break;
+			case 0xA4:
+				printf("ANA    H");
+				break;
+			case 0xA5:
+				printf("ANA    L");
+				break;
+			case 0xA6:
+				printf("ANA    M");
+				break;
+			case 0xA7:
+				printf("ANA    A");
+				break;
+			case 0xA8:
+				printf("XRA    B");
+				break;
+			case 0xA9:
+				printf("XRA    C");
+				break;
+			case 0xAA:
+				printf("XRA    D");
+				break;
+			case 0xAB:
+				printf("XRA    E");
+				break;
+			case 0xAC:
+				printf("XRA    H");
+				break;
+			case 0xAD:
+				printf("XRA    L");
+				break;
+			case 0xAE:
+				printf("XRA    M");
+				break;
+			case 0xAF:
+				printf("XRA    A");
+				break;
+			case 0xB0:
+				printf("ORA    B");
+				break;
+			case 0xB1:
+				printf("ORA    C");
+				break;
+			case 0xB2:
+				printf("ORA    D");
+				break;
+			case 0xB3:
+				printf("ORA    E");
+				break;
+			case 0xB4:
+				printf("ORA    H");
+				break;
+			case 0xB5:
+				printf("ORA    L");
+				break;
+			case 0xB6:
+				printf("ORA    M");
+				break;
+			case 0xB7:
+				printf("ORA    A");
+				break;
+			case 0xB8:
+				printf("CMP    B");
+				break;
+			case 0xB9:
+				printf("CMP    C");
+				break;
+			case 0xBA:
+				printf("CMP    D");
+				break;
+			case 0xBB:
+				printf("CMP    E");
+				break;
+			case 0xBC:
+				printf("CMP    H");
+				break;
+			case 0xBD:
+				printf("CMP    L");
+				break;
+			case 0xBE:
+				printf("CMP    M");
+				break;
+			case 0xBF:
+				printf("CMP    A");
+				break;
+			case 0xC0:
+				printf("RNZ");
+				break;
+			case 0xC1:
+				printf("POP    B");
+				break;
+			case 0xC2:
+				printf("JNZ    $%02x%02x",next_instr[2],next_instr[1]);
+				break;
 			case 0xC3:
-				printf("JMP ADR");
+				printf("JMP    $%02x%02x",next_instr[2],next_instr[1]);
+				break;
+			case 0xC4:
+				printf("CNZ    $%02x%02x",next_instr[2],next_instr[1]);
 				break;
 			case 0xC5:
 				printf("PUSH   B");
 				break;
+			case 0xC6:
+				printf("ADI    #$%02x", next_instr[1]);
+				break;
+			case 0xC7:
+				printf("RST    0");
+				break;
+			case 0xC8:
+				printf("RZ");
+				break;
+			case 0xC9:
+				printf("RET");
+				break;
+			case 0xCA:
+				printf("JZ    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xCB:
+				printf("NOP");
+				break;
+			case 0xCC:
+				printf("CZ    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xCD:
+				printf("CALL   $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xCE:
+				printf("ACI    #$%02x", next_instr[1]);
+				break;
+			case 0xCF:
+				printf("RST    1");
+				break;
+			case 0xD0:
+				printf("RNC");
+				break;
+			case 0xD1:
+				printf("POP    D");
+				break;
+			case 0xD2:
+				printf("JNC    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xD3:
+				printf("OUT    D8");
+				break;
+			case 0xD4:
+				printf("CNC    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
 			case 0xD5:
 				printf("PUSH   D");
+				break;
+			case 0xD6:
+				printf("SUI    #$%02x", next_instr[1]);
+				break;
+			case 0xD7:
+				printf("RST    2");
+				break;
+			case 0xD8:
+				printf("RC");
+				break;
+			case 0xD9:
+				printf("NOP");
+				break;
+			case 0xDA:
+				printf("JC     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xDB:
+				printf("IN     D8");
+				break;
+			case 0xDC:
+				printf("CC     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xDD:
+				printf("NOP");
+				break;
+			case 0xDE:
+				printf("SBI    #$%02x", next_instr[1]);
+				break;
+			case 0xDF:
+				printf("RST    3");
+				break;
+			case 0xE0:
+				printf("RPO");
+				break;
+			case 0xE1:
+				printf("POP    H");
+				break;
+			case 0xE2:
+				printf("JPO    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xE3:
+				printf("XTHL");
+				break;
+			case 0xE4:
+				printf("CPO    $%02x%02x", next_instr[2], next_instr[1]);
 				break;
 			case 0xE5:
 				printf("PUSH   H");
 				break;
+			case 0xE6:
+				printf("ANI    #$%02x", next_instr[1]);
+				break;
+			case 0xE7:
+				printf("RST    4");
+				break;
+			case 0xE8:
+				printf("RPE");
+				break;
+			case 0xE9:
+				printf("PCHL");
+				break;
+			case 0xEA:
+				printf("JPE    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xEB:
+				printf("XCHG");
+				break;
+			case 0xEC:
+				printf("CPE    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xED:
+				printf("NOP");
+				break;
+			case 0xEE:
+				printf("XRI    $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xEF:
+				printf("RST    5");
+				break;
+			case 0xF0:
+				printf("RP");
+				break;
+			case 0xF1:
+				printf("POP    PSW");
+				break;
+			case 0xF2:
+				printf("JP     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xF3:
+				printf("DI");
+				break;
+			case 0xF4:
+				printf("CP     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
 			case 0xF5:
 				printf("PUSH   PSW");
+				break;
+			case 0xF6:
+				printf("ORI    #$%02x", next_instr[1]);
+				break;
+			case 0xF7:
+				printf("RST    6");
+				break;
+			case 0xF8:
+				printf("RM");
+				break;
+			case 0xF9:
+				printf("SPHL");
+				break;
+			case 0xFA:
+				printf("JM     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xFB:
+				printf("EI");
+				break;
+			case 0xFC:
+				printf("CM     $%02x%02x", next_instr[2], next_instr[1]);
+				break;
+			case 0xFD:
+				printf("NOP");
+				break;
+			case 0xFE:
+				printf("CPI    #$%02x", next_instr[1]);
+				break;
+			case 0xFF:
+				printf("RST    7");
 				break;
 			default:
 				printf("INSTRUCTION: %x ", next_instr[0]);
