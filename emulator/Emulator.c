@@ -59,17 +59,17 @@ uint8_t isZero_16(uint16_t num) {
 /* Returns whether 16 (or 8)-bit number num is zero */
 #define isZero(num) _Generic(num, uint8_t: izZero_8, uint16_t: isZero_16)(num)
 
-/* Returns 1 when 8-bit num is odd; otherwise, return 0. */
+/* Returns 1 when 8-bit num is even; otherwise, return 0. */
 uint8_t Parity_8(uint8_t num) {
-	return (num & 0x01);
+	return 1 - (num & 0x01);
 }
 
-/* Returns 1 when 16-bit num is odd; otherwise, return 0. */
+/* Returns 1 when 16-bit num is even; otherwise, return 0. */
 uint8_t Parity_16(uint16_t num) {
-	return (num & 0x0001);
+	return 1 - (num & 0x0001);
 }
 
-/* Returns the parity of a 16 (or 8)-bit number num */
+/* Returns the parity (1: even, 0: odd) of a 16 (or 8)-bit number num */
 #define Parity(num) _Generic(num, uint8_t: Parity_8, uint16_t: Parity_16)(num)
 
 /* Updates the state of an 8080 CPU after an add operation with result as the
@@ -512,30 +512,50 @@ int Emulate(struct State8080 *state)
 		case 0x80:	
 			result = (uint16_t)state->a + (uint16_t)state->b;
 			State8080UpdateAdd(state, result);
-			
 			/* Store the least significant 8 bits of result in a */
 			state->a = result & 0xFF;
 			break;
 		case 0x81:
-			printf("ADD    C");
+			result = (uint16_t)state->a + (uint16_t)state->c;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x82:
-			printf("ADD    D");
+			result = (uint16_t)state->a + (uint16_t)state->d;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x83:
-			printf("ADD    E");
+			result = (uint16_t)state->a + (uint16_t)state->e;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x84:
-			printf("ADD    H");
+			result = (uint16_t)state->a + (uint16_t)state->h;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x85:
-			printf("ADD    L");
+			result = (uint16_t)state->a + (uint16_t)state->l;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x86:
-			printf("ADD    M");
+			result = (uint16_t)state->a + (uint16_t)state->l + (state->h << 8);
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x87:
-			printf("ADD    A");
+			result = (uint16_t)state->a + (uint16_t)state->a;
+			State8080UpdateAdd(state, result);
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x88:
 			printf("ADC    B");
