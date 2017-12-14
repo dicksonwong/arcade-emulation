@@ -48,15 +48,58 @@ typedef struct State8080 {
 
 /* Returns 1 if 8-bit num is zero; otherwise, return 0. */
 uint8_t isZero_8(uint8_t num) {
-	return (num && 0xFF) == 0;
+	return (num & 0xFF) == 0;
 }
 
 /* Returns 1 if 16-bit num is zero; otherwise, return 0. */
 uint8_t isZero_16(uint16_t num) {
-	return (num && 0xFFFF) == 0;
+	return (num & 0xFFFF) == 0;
 }
 
+/* Returns whether 16 (or 8)-bit number num is zero */
 #define isZero(num) _Generic(num, uint8_t: izZero_8, uint16_t: isZero_16)(num)
+
+/* Returns 1 when 8-bit num is odd; otherwise, return 0. */
+uint8_t Parity_8(uint8_t num) {
+	return (num & 0x01);
+}
+
+/* Returns 1 when 16-bit num is odd; otherwise, return 0. */
+uint8_t Parity_16(uint16_t num) {
+	return (num & 0x0001);
+}
+
+/* Returns the parity of a 16 (or 8)-bit number num */
+#define Parity(num) _Generic(num, uint8_t: Parity_8, uint16_t: Parity_16)(num)
+
+/* Updates the state of an 8080 CPU after an add operation with result as the
+ * sum */
+void State8080UpdateAdd(struct State8080 *state, uint16_t result)
+{
+	/* Updates Zero flag */
+	if isZero(result) {
+		state->flags->z = 1;
+	} else {
+		state->flags->z = 0;
+	}
+	
+	/* Updates Sign flag - set to 1 when bit 7 is set to 1 */
+	if (result & 0x0080) {
+		state->flags->s = 1;
+	} else {
+		state->flags->s = 0;
+	}
+	
+	/* Updates carry flag - set to 1 when instruction resulted in carry */
+	if (result > 0xFF) {
+		state->flags->c = 1;
+	} else {
+		state->flags->c = 0;
+	}
+	
+	/* Update parity flag */
+	state->flags->p = Parity(answer);
+}
 
 /* emulates the 8080 instruction set given a pointer to the current state of 
  * the CPU; follows a simple fetch-decode=execute model */
@@ -468,15 +511,10 @@ int Emulate(struct State8080 *state)
 			break;
 		case 0x80:	
 			result = (uint16_t)state->a + (uint16_t)state->b;
+			State8080UpdateAdd(state, result);
 			
-			if isZero(result) {
-				state->flags->z = 1;
-			} else {
-				state->flags->z = 0;
-			}
-			
-			
-			printf("ADD    B");
+			/* Store the least significant 8 bits of result in a */
+			state->a = result & 0xFF;
 			break;
 		case 0x81:
 			printf("ADD    C");
