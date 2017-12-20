@@ -558,28 +558,44 @@ int Emulate(struct State8080 *state)
 			state->a = result & 0xFF;
 			break;
 		case 0x88:
-			printf("ADC    B");
+			result = (uint16_t)state->a + (uint16_t)state->b + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x89:
-			printf("ADC    C");
+			result = (uint16_t)state->a + (uint16_t)state->c + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8A:
-			printf("ADC    D");
+			result = (uint16_t)state->a + (uint16_t)state->d + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8B:
-			printf("ADC    E");
+			result = (uint16_t)state->a + (uint16_t)state->e + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8C:
-			printf("ADC    H");
+			result = (uint16_t)state->a + (uint16_t)state->h + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8D:
-			printf("ADC    L");
+			result = (uint16_t)state->a + (uint16_t)state->l + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8E:
-			printf("ADC    M");
+			result = (uint16_t)state->a + (uint16_t)state->l + (state->h << 8) + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x8F:
-			printf("ADC    A");
+			result = (uint16_t)state->a + (uint16_t)state->a + state->flags->c;
+			State8080UpdateAdd(state, result);
+			state->a = result & 0xFF;
 			break;
 		case 0x90:
 			printf("SUB    B");
